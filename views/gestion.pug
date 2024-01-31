@@ -1,0 +1,86 @@
+extends layout
+
+block content
+  h1 Gestión de Usuarios
+
+  //Agregar nuevo boton para cambio de contraseña de operador 
+
+  // Botón para obtener todos los usuarios
+  button(id="btnObtenerUsuarios", class="btn", onclick="obtenerUsuarios()") Obtener Todos los Usuarios
+
+  // Botón para crear un nuevo usuario
+  button(id="btnCrearUsuario", class="btn", onclick="crearNuevoUsuario()") Crear Nuevo Usuario
+
+  // Tabla para mostrar los usuarios
+  table(id="tablaUsuarios")
+    thead
+      tr
+        th ID
+        th Usuario
+        th Contraseña
+        th Tipo
+        th Acciones
+
+    tbody
+
+      // Tabla dinámica 
+
+script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js").
+  // Función para obtener todos los usuarios y actualizar la tabla
+  function obtenerUsuarios() {
+    axios.get('/auth/gestion/usuarios')
+      .then(response => {
+        actualizarTabla(response.data);
+      })
+      .catch(error => console.error('Error al obtener usuarios:', error));
+  }
+
+  // Crear un nuevo usuario y actualizar la tabla
+  function crearNuevoUsuario() {
+    axios.post('/auth/gestion/nuevo-usuario', { user: 'NuevoUsuario', passwd: '12345', tipo: 'usuario' })
+      .then(() => {
+        obtenerUsuarios();
+      })
+      .catch(error => console.error('Error al crear un nuevo usuario:', error));
+  }
+
+  // Actualizar dinámicamente la tabla con datos proporcionados
+  function actualizarTabla(usuarios) {
+    const tablaUsuarios = document.getElementById('tablaUsuarios');
+    const tbody = tablaUsuarios.querySelector('tbody');
+
+
+    // Agrega filas a la tabla con los datos de los usuarios
+    usuarios.forEach(usuario => {
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${usuario.id}</td>
+        <td>${usuario.user}</td>
+        <td>${usuario.passwd}</td>
+        <td>${usuario.tipo}</td>
+        <td>
+          <button onclick="editarUsuario(${usuario.id})">Editar</button>
+          <button onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+        </td>
+      `;
+      tbody.appendChild(fila);
+    });
+  }
+
+  // Función para editar un usuario
+  function editarUsuario(id) {
+    console.log('Editar usuario con ID:', id);
+
+  }
+
+  // Función para eliminar un usuario y actualizar la tabla
+  function eliminarUsuario(id) {
+    axios.delete(`/auth/gestion/eliminar-usuario/${id}`)
+      .then(() => {
+        obtenerUsuarios();
+      })
+      .catch(error => console.error('Error al eliminar el usuario:', error));
+  }
+
+  obtenerUsuarios();
+//Agregar css a ambas páginas 

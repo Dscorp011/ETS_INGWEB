@@ -1,0 +1,28 @@
+{
+  "name": "pnodeiw_dav",
+  "version": "1.0.0",
+  "description": "Proyecto ETS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "server": "nodemon main.js"
+  },
+  "keywords": [
+    "MySql",
+    "HTML",
+    "CSS",
+    ".JSON"
+  ],
+  "author": "Alvarado Venegas Diego",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "myql": "^1.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.1",
+    "nodemon": "^3.0.3"
+  }
+}
